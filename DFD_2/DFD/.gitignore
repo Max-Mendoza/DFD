@@ -1,0 +1,21 @@
+env/
+backend/env/
+
+# Archivos Python compilados
+__pycache__/
+*.py[cod]
+
+# Dependencias de Node
+node_modules/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos grandes o temporales
+*.log
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/

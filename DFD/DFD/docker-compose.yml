@@ -1,0 +1,86 @@
+
+services:
+  backend:
+    build: ./backend
+    command: daphne DataforDummies.asgi:application -b 0.0.0.0 -p 8000
+    ports:
+      - "5000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - redis
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_URL: postgresql://postgres:BTRjbfQRNDfAmrUT@db.ebrabmmbfxaxnywdxkov.supabase.co:5432/postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MONGO_URI: mongodb+srv://Deitafordumi:q2TxBelVbreIgbo7@cluster0.vldg8fj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+      ALLOWED_HOSTS_DOCKER: ${ALLOWED_HOSTS_DOCKER}
+    env_file:
+      - ".env"
+    networks:
+      - my_ipv6_net
+
+  frontend:
+    build:
+      context: ./DataforDummies
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - my_ipv6_net
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - my_ipv6_net
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - my_ipv6_net
+
+volumes:
+  db_data:
+  redis_data:
+
+networks:
+  my_ipv6_net:
+    driver: bridge         # opcional, por defecto es bridge
+    enable_ipv6: true      # ponlo solo si realmente necesitas IPv6
+    ipam:
+      config:
+        - subnet: "2001:db8:1::/64"
