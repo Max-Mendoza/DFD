@@ -23,8 +23,8 @@ env = environ.Env(
 )
 
 # Lee el archivo .env desde la ruta correcta
-env.read_env(BASE_DIR / '.env')
-
+if os.path.exists(BASE_DIR / '.env'):
+    env.read_env(BASE_DIR / '.env')
 # Ahora puedes usar env normalmente
 DEBUG = env('DEBUG')
 # settings for mongo
