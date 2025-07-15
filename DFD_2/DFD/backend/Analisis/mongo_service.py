@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from django.conf import settings
 from pymongo.server_api import ServerApi
 
-client = MongoClient(settings.MONGO_URI,server_api=ServerApi('1'))
+client = MongoClient(settings.MONGO_URI, tls=True)
 db = client[settings.MONGO_DB_NAME]
 
 
