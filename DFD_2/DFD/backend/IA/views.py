@@ -20,8 +20,8 @@ def huggingface_query(prompt):
     ]
 
     headers = {
-        "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
-        "HTTP-Referer": "https://datafordummies.app",  # Cambia a tu dominio real si tienes
+        "Authorization": f"Bearer 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",
+        "HTTP-Referer": "https://data-for-dummies-nine.vercel.app",  # Cambia a tu dominio real si tienes
         "X-Title": "DataForDummies Assistant"
     }
 
