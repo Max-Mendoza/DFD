@@ -79,7 +79,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app' ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app', 'dfd-70zd.onrender.com' ]
 
 
 # Application definition
