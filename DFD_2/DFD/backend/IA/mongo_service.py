@@ -20,12 +20,35 @@ MONGO_OPERATORS = {
     "in": "$in"
 }
 
+
+def debug_database_content(user_id, project_id):
+    collection = db.tables
+    
+    print("DEBUG: Todas las tablas en la base de datos:")
+    all_tables = list(collection.find({}, {"user_id": 1, "project_id": 1, "name": 1}))
+    for table in all_tables[:5]:  # Primeras 5
+        print(f"  - user_id: {table.get('user_id')} (tipo: {type(table.get('user_id'))})")
+        print(f"    project_id: {table.get('project_id')} (tipo: {type(table.get('project_id'))})")
+        print(f"    name: {table.get('name')}")
+        print()
+    
+    print(f"DEBUG: Buscando específicamente user_id={user_id} (tipo: {type(user_id)}), project_id={project_id} (tipo: {type(project_id)})")
+
 def get_tables(user_id, project_id):
     collection = db.tables
-    result = collection.find({
+    print(f"DEBUG: get_tables - Buscando tablas para user_id={user_id}, project_id={project_id}")
+    
+    query = {
         "user_id": int(user_id),
         "project_id": project_id
-    }, {"name": 1})
+    }
+    print(f"DEBUG: Query MongoDB: {query}")
+    
+    result = collection.find(query, {"name": 1})
+    tables = [doc["name"] for doc in result]
+    
+    print(f"DEBUG: Tablas encontradas: {tables}")
+    return tables
         
     return ([doc["name"] for doc in result]  )
 
@@ -130,19 +153,27 @@ def get_relevant_tables(prompt, user_id, project_id, umbral=70):
     return [table[0] for table in similar_tables]  # Extrae solo el nombre (primer elemento de cada tupla)
 
 def build_prompt_with_context(question, user_id, project_id):
+    print(f"DEBUG: build_prompt_with_context - user_id={user_id}, project_id={project_id}")
+    print(f"DEBUG: question={question}")
     
-    tables_name = get_relevant_tables(prompt= question, user_id=user_id, project_id=project_id)
+    tables_name = get_relevant_tables(prompt=question, user_id=user_id, project_id=project_id)
+    print(f"DEBUG: tables_name encontradas: {tables_name}")
     
+    if not tables_name:
+        print("DEBUG: No se encontraron tablas relevantes")
+        return f"No se encontraron tablas relevantes para la pregunta: {question}"
     
-    schema = get_schema_context(user_id=user_id,project_id= project_id, tables_name=tables_name)
+    schema = get_schema_context(user_id=user_id, project_id=project_id, tables_name=tables_name)
+    print(f"DEBUG: schema obtenido: {schema}")
     
+    # ✅ Primero definir schema_json
     schema_json = json.dumps(schema, ensure_ascii=False, indent=2)
+    # ✅ Luego usar el print
     print("DEBUG schema json:", schema_json)
 
     prompt = f"""
     Eres un asistente experto en análisis de datos que interpreta preguntas en lenguaje natural para MongoDB.
     
-
     Si no aplica agregación, omite esos campos.
 
     Tu tarea es traducir la consulta del usuario en un JSON válido que incluya:
@@ -151,6 +182,7 @@ def build_prompt_with_context(question, user_id, project_id):
     - fields: lista precisa de campos existentes a mostrar
     - filters: lista con filtros que contengan 'field', 'operator' (eq, gt, lt, etc.) y 'value'
     - response_text: una explicación clara y directa que responda la consulta de forma natural y útil
+    
     Si el usuario pide "el producto más vendido", "el menor precio", "el cliente con más compras", etc.,
     responde también con los campos:
     - aggregation: "max" o "min"
@@ -170,9 +202,8 @@ def build_prompt_with_context(question, user_id, project_id):
     {question}
     """
 
-
-
     return prompt
+
 def pivot_columnar_table(values_dict):
     if not values_dict:
         return []
@@ -216,8 +247,11 @@ def apply_filters_to_rows(rows, filters):
 def get_schema_context(user_id, project_id, tables_name):
     collection = db.tables
     context = []
-    print(tables_name)
+    print(f"DEBUG: Buscando tablas para user_id={user_id}, project_id={project_id}")
+    print(f"DEBUG: tables_name={tables_name}")
+    
     for table_name in tables_name:
+        print(f"DEBUG: Buscando tabla: {table_name}")
         table = collection.find_one(
             {
                 "user_id": int(user_id),
@@ -231,15 +265,15 @@ def get_schema_context(user_id, project_id, tables_name):
                 "_id": 0     
             }
         )
-        print(table_name)
-        print(table)
-        
+        print(f"DEBUG: Tabla encontrada: {table}")
         
         if table:
+            # ✅ Corregir aquí
             columns = [
                 {"name": col}
-                for col in zip(table.get("columns", []))
+                for col in table.get("columns", [])  # Sin zip()
             ]
+            print(f"DEBUG: Columnas procesadas: {columns}")
             
             context.append({
                 "table_key": table.get("table_key"),
@@ -247,4 +281,5 @@ def get_schema_context(user_id, project_id, tables_name):
                 "columns": columns
             })
     
+    print(f"DEBUG: Context final: {context}")
     return context
