@@ -79,7 +79,10 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app', 'dfd-70zd.onrender.com' ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app', 'dfd-70zd.onrender.com',
+                'https://data-for-dummies-r5tv.vercel.app', 'http://localhost:3000',
+                'https://datafordummies.onrender.com'
+                ]
 
 
 # Application definition
@@ -222,9 +225,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-]
+CORS_ALLOWED_ORIGINS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app', 'dfd-70zd.onrender.com',
+                'https://data-for-dummies-r5tv.vercel.app', 'http://localhost:3000',
+                'https://datafordummies.onrender.com']
+
 
 
 AUTH_USER_MODEL = 'users.User'
