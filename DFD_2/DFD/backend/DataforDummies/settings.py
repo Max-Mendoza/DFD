@@ -82,7 +82,8 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app', 'dfd-70zd.onrender.com',
                 'https://data-for-dummies-r5tv.vercel.app', 'http://localhost:3000',
                 'https://datafordummies.onrender.com',
-                 'https://data-for-dummies-nine.vercel.app/'
+                 'https://data-for-dummies-nine.vercel.app/',
+                 'https://data-for-dummies-ku3oce9bv-sugaxd123src-gmailcoms-projects.vercel.app'
                 ]
 
 
@@ -229,6 +230,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = ['localhost', '127.0.0.1', "http://localhost:3000", '.railway.app', 'dfd-70zd.onrender.com',
                 'https://data-for-dummies-r5tv.vercel.app', 'http://localhost:3000',
                         'https://data-for-dummies-nine.vercel.app/',
+                        'https://data-for-dummies-ku3oce9bv-sugaxd123src-gmailcoms-projects.vercel.app/auth/login',
                 'https://datafordummies.onrender.com']
 
 
