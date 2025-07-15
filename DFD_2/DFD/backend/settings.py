@@ -25,6 +25,10 @@ env = environ.Env(
 # Lee el archivo .env desde la ruta correcta
 env.read_env(BASE_DIR / '.env')
 
+print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
+print("CORS_ALLOWED_ORIGINS:", CORS_ALLOWED_ORIGINS)
+
+
 # Ahora puedes usar env normalmente
 DEBUG = env('DEBUG')
 # settings for mongo
