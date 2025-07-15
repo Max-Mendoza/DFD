@@ -79,7 +79,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['dfd-70zd.onrender.com','localhost', '127.0.0.1', "http://localhost:3000"]
+ALLOWED_HOSTS = ['dfd-70zd.onrender.com','localhost', '127.0.0.1']
 
 
 # Application definition
