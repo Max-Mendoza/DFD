@@ -3,14 +3,16 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
-from .mongo_service import build_filter_mongo, build_prompt_with_context, validate_query, execute_query, get_tables, get_columns
+from .mongo_service import build_filter_mongo, build_prompt_with_context, validate_query, execute_query, get_tables, get_columns, debug_database_content
 from pymongo import MongoClient
 from django.conf import settings
 from rest_framework import permissions
 import re
 import os
-from huggingface_hub import InferenceClient
 
+import os
+api_key = os.getenv('OPENROUTER_API_KEY')    
+    
 def huggingface_query(prompt):
     messages = [
         {
@@ -20,13 +22,13 @@ def huggingface_query(prompt):
     ]
 
     headers = {
-        "Authorization": f"Bearer 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",
-        "HTTP-Referer": "https://data-for-dummies-nine.vercel.app",  # Cambia a tu dominio real si tienes
+        "Authorization": f"Bearer {api_key}",
+        "HTTP-Referer": "https://data-for-dummies-nine.vercel.app",
         "X-Title": "DataForDummies Assistant"
     }
 
     data = {
-        "model": "openrouter/cypher-alpha:free",  # Puedes usar claude-3-haiku, llama3:8b-instruct, etc.
+        "model": "moonshotai/kimi-k2:free",  # Puedes usar claude-3-haiku, llama3:8b-instruct, etc.
         "messages": messages
     }
 
@@ -106,8 +108,8 @@ class QueryMongoIA(APIView):
     def post(self, request):
         question = request.data.get("question")
         project_id = request.data.get("project_id")
-        user_id = str(request.user.id)
-   
+        user_id = request.user.id
+        debug_database_content(user_id, project_id)
         if not question or not project_id:
             return Response({"error": "Missing 'pregunta' or 'proyecto'"}, status=400)
         prompt = build_prompt_with_context(question, user_id, project_id)
