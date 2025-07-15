@@ -224,6 +224,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://data-for-dummies-r5tv.vercel.app',
+    'https://datafordummies.onrender.com'
 ]
 
 
