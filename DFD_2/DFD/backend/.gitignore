@@ -1,0 +1,75 @@
+# --- PYTHON / DJANGO ---
+
+# Entornos virtuales
+venv/
+env/
+myenv/
+.venv/
+
+# Archivos de compilación
+*.py[cod]
+__pycache__/
+*.so
+
+# Archivos de configuración locales
+.env
+*.sqlite3
+db.sqlite3
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+*.coverage
+coverage/
+
+# Archivos de migraciones (opcionales si usas versionado limpio)
+**/migrations/__pycache__/
+**/migrations/*.pyc
+**/migrations/*.pyo
+
+# Archivos de IDEs
+.vscode/
+.idea/
+
+# Archivos de testing
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Archivos de documentación auto-generados
+docs/_build/
+
+# --- NODE / FRONTEND (Vite, React) ---
+
+# Dependencias de Node.js
+node_modules/
+
+# Archivos de producción
+dist/
+build/
+
+# Archivos temporales
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite cache
+.vite/
+.cache/
+
+# --- DOCKER ---
+
+# Archivos creados por contenedores
+**/.docker-volume/
+
+# --- RAILWAY / DEPLOY ---
+
+# Archivos locales no necesarios
+.nixpacks/
+*.lock
